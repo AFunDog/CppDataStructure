@@ -1,0 +1,77 @@
+﻿<UserControl
+    x:Class="WPFExample.Controls.EditFriendContent"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WPFExample.Controls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    d:DataContext="{d:DesignInstance Type=local:EditFriendContentModel}"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+    <UserControl.Resources>
+        <local:IntToDoubleConverter x:Key="IntToDoubleConverter" />
+    </UserControl.Resources>
+    <StackPanel Width="560" Orientation="Vertical">
+        <ui:TextBlock
+            Margin="8"
+            FontTypography="Title"
+            Text="{Binding ContentTitle, Mode=OneWay}" />
+        <Label Content="好友名称" Target="{Binding ElementName=nameTextBox}" />
+        <ui:TextBox x:Name="nameTextBox" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <StackPanel Margin="0,0,4,0" Orientation="Vertical">
+                <Label Content="生日年份" Target="{Binding ElementName=birthYearNumberBox}" />
+                <ui:NumberBox
+                    x:Name="birthYearNumberBox"
+                    Maximum="2100"
+                    Minimum="1900"
+                    SmallChange="1"
+                    Value="{Binding BirthYear, Mode=TwoWay, Converter={StaticResource IntToDoubleConverter}, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <StackPanel
+                Grid.Column="1"
+                Margin="4,0,0,0"
+                Orientation="Vertical">
+                <Label Content="生日月份" Target="{Binding ElementName=birthMonthNumberBox}" />
+                <ui:NumberBox
+                    x:Name="birthMonthNumberBox"
+                    Maximum="12"
+                    Minimum="1"
+                    SmallChange="1"
+                    Value="{Binding BirthMonth, Mode=TwoWay, Converter={StaticResource IntToDoubleConverter}, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Vertical">
+                <Label Content="头像路径" Target="{Binding ElementName=picPathTextBox}" />
+                <ui:TextBox x:Name="picPathTextBox" Text="{Binding PicPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+            <ui:Button
+                Grid.Column="1"
+                Margin="8,0,8,0"
+                VerticalAlignment="Bottom"
+                Click="FilePickerButton_OnClicked"
+                Content="选择" />
+        </Grid>
+        <Label Content="爱好" Target="{Binding ElementName=hobbyTextBox}" />
+        <ui:TextBox
+            x:Name="hobbyTextBox"
+            Height="128"
+            Text="{Binding Hobby, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            TextWrapping="Wrap" />
+        <ui:InfoBar
+            IsOpen="{Binding IsInfoBarOpen, Mode=TwoWay}"
+            Message="{Binding InfoBarMessage, Mode=OneWay}"
+            Severity="{Binding InfoBarSeverity, Mode=OneWay}" />
+    </StackPanel>
+</UserControl>

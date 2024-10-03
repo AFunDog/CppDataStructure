@@ -1,0 +1,287 @@
+﻿<ui:FluentWindow
+    x:Class="WPFExample.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WPFExample"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sys="clr-namespace:System;assembly=System"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="好友信息管理"
+    Width="1280"
+    Height="720"
+    d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
+    ExtendsContentIntoTitleBar="True"
+    UseLayoutRounding="True"
+    WindowBackdropType="Acrylic"
+    mc:Ignorable="d">
+    <Window.Resources>
+        <local:ImagePathToImageSourceConverter x:Key="ImagePathToImageSourceConverter" />
+        <local:DivConverter x:Key="DivConverter" />
+        <Style x:Key="DefListViewItemStyle" TargetType="ui:ListViewItem">
+            <Setter Property="SnapsToDevicePixels" Value="true" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ui:ListViewItem">
+                        <ContentPresenter Margin="8" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ContentBorder" TargetType="Border">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush>
+                        <LinearGradientBrush.GradientStops>
+                            <GradientStopCollection>
+                                <GradientStop Offset="0" Color="BlueViolet" />
+                                <GradientStop Offset="1" Color="MediumPurple" />
+                            </GradientStopCollection>
+                        </LinearGradientBrush.GradientStops>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <!--<Setter Property="HorizontalContentAlignment" Value="Stretch" />-->
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <!--<Setter Property="VerticalContentAlignment" Value="Stretch" />-->
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="Margin" Value="8" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect
+                        BlurRadius="8"
+                        Opacity="0.2"
+                        ShadowDepth="16" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <!--<ScaleTransform CenterX="{Binding ActualWidth, ConverterParameter=2, Converter={StaticResource DivConverter}, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}}}" CenterY="{Binding ActualHeight, ConverterParameter=2, Converter={StaticResource DivConverter}, Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Border}}}" ScaleX="1" ScaleY="1" />-->
+                    <TranslateTransform />
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard>
+                            <Storyboard Duration="0:0:0.4">
+                                <DoubleAnimation Storyboard.TargetProperty="(Border.RenderTransform).(TranslateTransform.Y)" To="-8">
+                                    <DoubleAnimation.EasingFunction>
+                                        <PowerEase EasingMode="EaseOut" Power="2" />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetProperty="(Border.RenderTransform).(TranslateTransform.X)" To="-4">
+                                    <DoubleAnimation.EasingFunction>
+                                        <PowerEase EasingMode="EaseOut" Power="2" />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetProperty="(Border.Effect).(DropShadowEffect.ShadowDepth)" To="24">
+                                    <DoubleAnimation.EasingFunction>
+                                        <PowerEase EasingMode="EaseOut" Power="2" />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <BeginStoryboard>
+                            <Storyboard Duration="0:0:0.3">
+                                <DoubleAnimation Storyboard.TargetProperty="(Border.RenderTransform).(TranslateTransform.Y)">
+                                    <DoubleAnimation.EasingFunction>
+                                        <PowerEase EasingMode="EaseOut" Power="2" />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetProperty="(Border.RenderTransform).(TranslateTransform.X)">
+                                    <DoubleAnimation.EasingFunction>
+                                        <PowerEase EasingMode="EaseOut" Power="2" />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                                <DoubleAnimation Storyboard.TargetProperty="(Border.Effect).(DropShadowEffect.ShadowDepth)">
+                                    <DoubleAnimation.EasingFunction>
+                                        <PowerEase EasingMode="EaseOut" Power="2" />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <ContextMenu x:Key="friendContextMenu" Margin="16">
+            <ContextMenu.Effect>
+                <DropShadowEffect
+                    BlurRadius="8"
+                    Opacity="0.2"
+                    ShadowDepth="8" />
+            </ContextMenu.Effect>
+            <ui:MenuItem Click="EditFriendMenuItem_OnClicked" Header="编辑好友信息">
+                <ui:MenuItem.Icon>
+                    <ui:SymbolIcon Symbol="Edit20" />
+                </ui:MenuItem.Icon>
+            </ui:MenuItem>
+            <ui:MenuItem Click="InsertFriendAheadMenuItem_OnClicked" Header="在前面插入好友信息">
+                <ui:MenuItem.Icon>
+                    <ui:SymbolIcon Symbol="ArrowLeft20" />
+                </ui:MenuItem.Icon>
+            </ui:MenuItem>
+            <ui:MenuItem Click="InsertFriendBackMenuItem_OnClicked" Header="在后面插入好友信息">
+                <ui:MenuItem.Icon>
+                    <ui:SymbolIcon Symbol="ArrowRight20" />
+                </ui:MenuItem.Icon>
+            </ui:MenuItem>
+            <ui:MenuItem Click="RemoveFriendMenuItem_OnClicked" Header="删除好友">
+                <ui:MenuItem.Icon>
+                    <ui:SymbolIcon Foreground="Red" Symbol="Delete20" />
+                </ui:MenuItem.Icon>
+            </ui:MenuItem>
+        </ContextMenu>
+    </Window.Resources>
+    <Grid>
+        <Grid.Background>
+            <SolidColorBrush Opacity="0.4" Color="#000000" />
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <ui:TitleBar
+            x:Name="windowTitleBar"
+            Title="好友信息管理"
+            FontSize="16">
+            <ui:TitleBar.Icon>
+                <ui:SymbolIcon FontSize="20" Symbol="Apps16" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Menu Margin="16,0,16,0">
+                <MenuItem Click="AddFriendMenuItem_OnClicked" Header="添加好友">
+                    <MenuItem.Icon>
+                        <ui:SymbolIcon Symbol="Add24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Click="ReadFriendDataMenuItem_OnClicked" Header="读取本地数据">
+                    <MenuItem.Icon>
+                        <ui:SymbolIcon Symbol="FolderArrowUp24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Click="SaveFriendDataMenuItem_OnClicked" Header="保存本地数据">
+                    <MenuItem.Icon>
+                        <ui:SymbolIcon Symbol="FolderSync24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Click="SearchFriendMenuItem_OnClicked"
+                    Header="搜索好友"
+                    Visibility="{Binding SearchMenuItemVisibility, Mode=OneWay}">
+                    <MenuItem.Icon>
+                        <ui:SymbolIcon Symbol="Search24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Click="CancelSearchMenuItem_OnClicked"
+                    Foreground="Yellow"
+                    Header="取消搜索"
+                    Visibility="{Binding CancelSearchMenuItemVisibility}">
+                    <MenuItem.Icon>
+                        <ui:SymbolIcon Symbol="Dismiss24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem
+                    Click="ClearFriendMenuItem_OnClicked"
+                    Foreground="Red"
+                    Header="清空好友数据">
+                    <MenuItem.Icon>
+                        <ui:SymbolIcon Symbol="Delete24" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </Menu>
+            <TextBlock
+                Grid.Row="1"
+                Margin="16,0,16,0"
+                Visibility="{Binding CancelSearchMenuItemVisibility, Mode=OneWay}">
+                <Run Text="将搜索满足以下条件的好友" />
+                <LineBreak />
+                <ui:ListView ItemContainerStyle="{StaticResource DefListViewItemStyle}" ItemsSource="{Binding Searchs, Mode=OneWay}">
+                    <ui:ListView.ItemTemplate>
+                        <DataTemplate DataType="sys:String">
+                            <TextBlock>
+                                <Run Text=" - " />
+                                <Run Text="{Binding Path=., Mode=OneTime}" />
+                            </TextBlock>
+                        </DataTemplate>
+                    </ui:ListView.ItemTemplate>
+                </ui:ListView>
+            </TextBlock>
+            <ui:ListView
+                Grid.Row="2"
+                Margin="8"
+                ItemContainerStyle="{StaticResource DefListViewItemStyle}"
+                ItemsSource="{Binding Friends}"
+                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <!--  去掉默认选中样式  -->
+                <ui:ListView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel ItemWidth="212" Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ui:ListView.ItemsPanel>
+                <ui:ListView.ItemTemplate>
+                    <DataTemplate DataType="local:Friend">
+                        <Border
+                            ContextMenu="{StaticResource friendContextMenu}"
+                            MouseRightButtonDown="FriendInfo_OnMouseRightButtonDowned"
+                            Style="{StaticResource ContentBorder}"
+                            Tag="{Binding Info, Mode=OneWay}">
+                            <!--<ui:Button.Background>
+                                <SolidColorBrush Opacity="0.8" Color="#202020" />
+                            </ui:Button.Background>-->
+                            <StackPanel Orientation="Vertical">
+                                <ui:Image
+                                    Height="{Binding RelativeSource={x:Static RelativeSource.Self}, Path=ActualWidth, Mode=OneWay}"
+                                    Margin="0,8,0,8"
+                                    HorizontalAlignment="Stretch"
+                                    CornerRadius="8"
+                                    Source="{Binding PicPath, Mode=OneWay, Converter={StaticResource ImagePathToImageSourceConverter}}">
+                                    <ui:Image.Effect>
+                                        <DropShadowEffect
+                                            BlurRadius="8"
+                                            Opacity="0.4"
+                                            ShadowDepth="8"
+                                            Color="#000000" />
+                                    </ui:Image.Effect>
+                                </ui:Image>
+                                <TextBlock FontSize="20" Text="{Binding Name, Mode=OneWay}" />
+                                <!--<TextBlock>
+                                    <Run Text="Id:" />
+                                    <Run Text="{Binding Info.Id, Mode=OneWay}" />
+                                </TextBlock>-->
+                                <TextBlock>
+                                    <Run Text="{Binding BirthYear, Mode=OneWay}" />
+                                    <Run Text="/" />
+                                    <Run Text="{Binding BirthMonth, Mode=OneWay}" />
+                                </TextBlock>
+                                <TextBlock
+                                    MinHeight="72"
+                                    MaxWidth="212"
+                                    TextWrapping="Wrap">
+                                    <Run Text="爱好：" />
+                                    <Run Text="{Binding Hobby, Mode=OneWay}" />
+                                </TextBlock>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ui:ListView.ItemTemplate>
+            </ui:ListView>
+        </Grid>
+        <ContentPresenter x:Name="rootContentPresenter" Grid.Row="1" />
+    </Grid>
+</ui:FluentWindow>

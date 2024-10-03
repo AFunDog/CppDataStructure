@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "WPFExample": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}

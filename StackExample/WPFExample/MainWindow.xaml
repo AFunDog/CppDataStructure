@@ -1,0 +1,200 @@
+﻿<ui:FluentWindow
+    x:Class="WPFExample.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:WPFExample"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:sys="clr-namespace:System;assembly=System"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="计算器"
+    Width="400"
+    Height="600"
+    d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
+    ExtendsContentIntoTitleBar="True"
+    UseLayoutRounding="True"
+    WindowBackdropType="Acrylic"
+    mc:Ignorable="d">
+    <Window.Resources />
+    <Grid>
+        <Grid.Background>
+            <SolidColorBrush Opacity="0.4" Color="#000000" />
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <ui:TitleBar Title="计算器" FontSize="16">
+            <ui:TitleBar.Icon>
+                <ui:SymbolIcon FontSize="20" Symbol="Apps20" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <StackPanel Margin="24,16,24,0">
+                <TextBox
+                    x:Name="expTextBox"
+                    FontSize="42"
+                    IsReadOnly="True"
+                    PreviewKeyDown="ExpressionTextBox_OnPreviewKeyDowned"
+                    PreviewTextInput="ExpressionTextBox_OnPreviewTextInputed"
+                    Text="{Binding ShowExpression, Mode=OneWay}"
+                    TextAlignment="Right" />
+                <ui:InfoBar
+                    Title="错误"
+                    Height="48"
+                    Margin="0,8,0,0"
+                    Focusable="False"
+                    IsOpen="{Binding IsErrorInfoBarOpen, Mode=TwoWay}"
+                    Message="{Binding ErrorMessage, Mode=OneWay}"
+                    Severity="Error" />
+            </StackPanel>
+            <Grid Grid.Row="1" Margin="16,0,16,16">
+                <Grid.Resources>
+                    <Style BasedOn="{StaticResource {x:Type ui:Button}}" TargetType="ui:Button">
+                        <Setter Property="VerticalAlignment" Value="Stretch" />
+                        <Setter Property="HorizontalAlignment" Value="Stretch" />
+                        <Setter Property="Margin" Value="8" />
+                        <Setter Property="FontSize" Value="28" />
+                        <Setter Property="Focusable" Value="False" />
+                    </Style>
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <ui:Button
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Click="AppendLeftRoundButton_OnClicked">
+                    <TextBlock FontSize="24" Text="(" />
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="0"
+                    Grid.Column="1"
+                    Click="AppendRightRoundButton_OnClicked">
+                    <TextBlock FontSize="24" Text=")" />
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Click="DeleteLastButton_OnClicked">
+                    <ui:SymbolIcon Symbol="Backspace24" />
+
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="0"
+                    Grid.Column="3"
+                    Click="AppendDivButton_OnClicked">
+                    <TextBlock FontSize="24" Text="/" />
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Click="Append7Button_OnClicked">
+                    <TextBlock FontSize="24" Text="7" />
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Click="Append8Button_OnClicked">
+                    <TextBlock FontSize="24" Text="8" />
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="1"
+                    Grid.Column="2"
+                    Click="Append9Button_OnClicked">
+                    <TextBlock FontSize="24" Text="9" />
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="1"
+                    Grid.Column="3"
+                    Click="AppendMulButton_OnClicked">
+                    <ui:SymbolIcon Symbol="Dismiss24" />
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Click="Append4Button_OnClicked">
+                    <TextBlock FontSize="24" Text="4" />
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="2"
+                    Grid.Column="1"
+                    Click="Append5Button_OnClicked">
+                    <TextBlock FontSize="24" Text="5" />
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="2"
+                    Grid.Column="2"
+                    Click="Append6Button_OnClicked">
+                    <TextBlock FontSize="24" Text="6" />
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="2"
+                    Grid.Column="3"
+                    Click="AppendSubButton_OnClicked">
+                    <ui:SymbolIcon Symbol="Subtract24" />
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Click="Append1Button_OnClicked">
+                    <TextBlock FontSize="24" Text="1" />
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="3"
+                    Grid.Column="1"
+                    Click="Append2Button_OnClicked">
+                    <TextBlock FontSize="24" Text="2" />
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="3"
+                    Grid.Column="2"
+                    Click="Append3Button_OnClicked">
+                    <TextBlock FontSize="24" Text="3" />
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="3"
+                    Grid.Column="3"
+                    Click="AppendAddButton_OnClicked">
+                    <ui:SymbolIcon Symbol="Add24" />
+                </ui:Button>
+                <ui:Button Grid.Row="4" Grid.Column="0">
+                    <ui:SymbolIcon Symbol="AddSubtractCircle24" />
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="4"
+                    Grid.Column="1"
+                    Click="Append0Button_OnClicked">
+                    <TextBlock FontSize="24" Text="0" />
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="4"
+                    Grid.Column="2"
+                    Click="AppendPointButton_OnClicked">
+                    <TextBlock FontSize="24" Text="." />
+                </ui:Button>
+                <ui:Button
+                    Grid.Row="4"
+                    Grid.Column="3"
+                    Appearance="Primary"
+                    Click="StartCalculateButton_OnClicked">
+                    <TextBlock FontSize="24" Text="=" />
+                </ui:Button>
+            </Grid>
+        </Grid>
+    </Grid>
+</ui:FluentWindow>
